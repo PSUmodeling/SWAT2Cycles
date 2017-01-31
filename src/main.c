@@ -4,12 +4,15 @@ int main (int argc, char *argv[])
 {
     char            filename[MAXSTRING];
     char            cmdstr[MAXSTRING];
+    FILE           *plant_file;
     FILE           *mgt_file;
     int             i;
+    int             lno;
     int             subbasin;
     int             hru;
     int             match;
     sllist_struct  *mgt;
+    sllist_struct  *plant;
     mgt_struct     *record;
 
     /*
@@ -46,8 +49,23 @@ int main (int argc, char *argv[])
             subbasin, hru);
     }
 
-    /* 
-     * Open management file
+    /*
+     * Read plant file
+     */
+    strcpy (filename, "data/plant.dat");
+    plant_file = fopen (filename, "r");
+    if (NULL == plant_file)
+    {
+        printf ("\nError: Cannot find the specified plant file %s.\n",
+            filename);
+        exit (EXIT_FAILURE);
+    }
+
+    plant = SllistCreate ();
+    ReadPlant (plant_file, plant);
+
+    /*
+     * Read management file
      */
     strcpy (filename, "data/mgt2.txt");
     mgt_file = fopen (filename, "r");
@@ -59,20 +77,20 @@ int main (int argc, char *argv[])
         exit (EXIT_FAILURE);
     }
 
-    /*
-     * Read management file into a linked list
-     */
+    /* Read management file into a linked list */
     mgt = SllistCreate ();
 
     /* Skip header line of management file */
-    NextLine (mgt_file, cmdstr);
+    NextLine (mgt_file, cmdstr, &lno);
 
     while (1)
     {
         /* Read a line of management file */
-        NextLine (mgt_file, cmdstr);
-
-        if (strncasecmp ("EOF", cmdstr, 3) != 0)
+        if (-1 == NextLine (mgt_file, cmdstr, &lno))
+        {
+            break;
+        }
+        else
         {
             /* Parse one management record */
             record = (mgt_struct *) malloc (sizeof (mgt_struct));
@@ -83,10 +101,6 @@ int main (int argc, char *argv[])
             {
                 AddMgt (mgt, record);
             }
-        }
-        else
-        {
-            break;
         }
     }
 

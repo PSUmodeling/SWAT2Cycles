@@ -6,8 +6,9 @@ LIBS = -lm
 INCLUDES = -I${SRCDIR}/include
 
 SRCS_ = main.c\
-	read_mgt.c\
 	read_func.c\
+	read_mgt.c\
+	read_plant.c\
 	sllist.c\
 	sort_mgt.c
 

@@ -39,12 +39,11 @@ int Readable (char *cmdstr)
     return (readable);
 }
 
-void NextLine (FILE *fid, char *cmdstr)
+int NextLine (FILE *fid, char *cmdstr, int *lno)
 {
     /*
      * Read a non-blank line into cmdstr
      */
-
     int             j;
     strcpy (cmdstr, "\0");
 
@@ -53,7 +52,7 @@ void NextLine (FILE *fid, char *cmdstr)
         if (fgets (cmdstr, MAXSTRING, fid) == NULL)
         {
             strcpy (cmdstr, "EOF");
-            break;
+            return (-1);
         }
         /* This is the special case to ignore the BOM mark */
         else if (strncasecmp ("\357\273\277", cmdstr, 3) == 0)
@@ -65,5 +64,46 @@ void NextLine (FILE *fid, char *cmdstr)
                 cmdstr[j] = cmdstr[j + 3];
             }
         }
+    }
+
+    (*lno)++;
+
+    return (0);
+}
+
+int ReadBuffer (char *cmdstr, char type, void *data, int *bytes_consumed,
+    int *bytes_now)
+{
+    int             match;
+
+    switch (type)
+    {
+        case 'd':
+            match = sscanf (cmdstr + *bytes_consumed, "%lf%n", (double *)data,
+                bytes_now);
+            (*bytes_consumed) += *bytes_now;
+            break;
+        case 'i':
+            match = sscanf (cmdstr + *bytes_consumed, "%d%n", (int *)data,
+                bytes_now);
+            (*bytes_consumed) += *bytes_now;
+            break;
+        case 's':
+            match = sscanf (cmdstr + *bytes_consumed, "%s%n", (char *)data,
+                bytes_now);
+            (*bytes_consumed) += *bytes_now;
+            break;
+        default:
+            printf ("Error: Keyword type \'%c\' is not defined.\n", type);
+            exit (EXIT_FAILURE);
+    }
+
+    if (1 == match)
+    {
+        return (0);
+    }
+    else
+    {
+        return (-1);
     }
 }
