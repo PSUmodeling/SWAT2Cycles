@@ -54,6 +54,14 @@ typedef struct plant_struct
     double          bmdieoff;
 }                   plant_struct;
 
+typedef struct till_struct
+{
+    int             itnum;
+    char            tillnm[9];
+    double          effmix;
+    double          deptil;
+}                   till_struct;
+
 typedef struct mgt_struct
 {
     int             oid;
@@ -131,6 +139,7 @@ char                FirstNonWhite (char *);
 int                 NextLine (FILE *, char *, int *);
 int                 ReadBuffer (char *, char, void *, int *, int *);
 void                ReadPlant (FILE *, sllist_struct *);
+void                ReadTill (FILE *, sllist_struct *);
 void                ReadMgt (FILE *, sllist_struct *);
 int                 Readable (char *);
 

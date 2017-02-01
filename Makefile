@@ -9,6 +9,7 @@ SRCS_ = main.c\
 	read_func.c\
 	read_mgt.c\
 	read_plant.c\
+	read_till.c\
 	sllist.c\
 	sort_mgt.c
 

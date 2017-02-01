@@ -7,11 +7,13 @@ int main (int argc, char *argv[])
 {
     char            filename[MAXSTRING];
     FILE           *plant_file;
+    FILE           *till_file;
     FILE           *mgt_file;
     int             i;
     int             match;
     sllist_struct  *mgt;
     sllist_struct  *plant;
+    sllist_struct  *till;
 
     /*
      * Read command line arguments
@@ -61,6 +63,21 @@ int main (int argc, char *argv[])
 
     plant = SllistCreate ();
     ReadPlant (plant_file, plant);
+
+    /*
+     * Read tillage file
+     */
+    strcpy (filename, "data/till.dat");
+    till_file = fopen (filename, "r");
+    if (NULL == till_file)
+    {
+        printf ("\nError: Cannot find the specified tillage file %s.\n",
+            filename);
+        exit (EXIT_FAILURE);
+    }
+
+    till = SllistCreate ();
+    ReadTill (till_file, till);
 
     /*
      * Read management file
