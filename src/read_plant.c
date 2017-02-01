@@ -9,6 +9,8 @@ void ReadPlant (FILE *plant_file, sllist_struct *plant)
     char            cmdstr[MAXSTRING];
     plant_struct   *temp;
 
+    printf ("Reading plant description file...\n");
+
     while (1)
     {
         /* Read first line of a plant description */
@@ -311,4 +313,6 @@ void ReadPlant (FILE *plant_file, sllist_struct *plant)
 
         SllistPushBack (plant, temp);
     }
+
+    printf ("%d plant types found.\n", plant->size);
 }

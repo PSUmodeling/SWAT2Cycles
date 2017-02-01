@@ -1,19 +1,17 @@
 #include "swat2cycles.h"
 
+int                 subbasin;
+int                 hru;
+
 int main (int argc, char *argv[])
 {
     char            filename[MAXSTRING];
-    char            cmdstr[MAXSTRING];
     FILE           *plant_file;
     FILE           *mgt_file;
     int             i;
-    int             lno;
-    int             subbasin;
-    int             hru;
     int             match;
     sllist_struct  *mgt;
     sllist_struct  *plant;
-    mgt_struct     *record;
 
     /*
      * Read command line arguments
@@ -69,7 +67,6 @@ int main (int argc, char *argv[])
      */
     strcpy (filename, "data/mgt2.txt");
     mgt_file = fopen (filename, "r");
-
     if (NULL == mgt_file)
     {
         printf ("\nError: Cannot find the specified management file %s.\n",
@@ -79,30 +76,7 @@ int main (int argc, char *argv[])
 
     /* Read management file into a linked list */
     mgt = SllistCreate ();
-
-    /* Skip header line of management file */
-    NextLine (mgt_file, cmdstr, &lno);
-
-    while (1)
-    {
-        /* Read a line of management file */
-        if (-1 == NextLine (mgt_file, cmdstr, &lno))
-        {
-            break;
-        }
-        else
-        {
-            /* Parse one management record */
-            record = (mgt_struct *) malloc (sizeof (mgt_struct));
-            ReadMgt (cmdstr, record);
-
-            /* Add management record to lined list if needed */
-            if (record->subbasin == subbasin && record->hru == hru)
-            {
-                AddMgt (mgt, record);
-            }
-        }
-    }
+    ReadMgt (mgt_file, mgt);
 
     if (0 == mgt->size)
     {
