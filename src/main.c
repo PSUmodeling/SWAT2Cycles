@@ -6,12 +6,14 @@ int                 hru;
 int main (int argc, char *argv[])
 {
     char            filename[MAXSTRING];
+    FILE           *fert_file;
     FILE           *plant_file;
     FILE           *till_file;
     FILE           *mgt_file;
     int             i;
     int             match;
     sllist_struct  *mgt;
+    sllist_struct  *fert;
     sllist_struct  *plant;
     sllist_struct  *till;
 
@@ -78,6 +80,21 @@ int main (int argc, char *argv[])
 
     till = SllistCreate ();
     ReadTill (till_file, till);
+
+    /*
+     * Read fertilizer file
+     */
+    strcpy (filename, "data/fert.dat");
+    fert_file = fopen (filename, "r");
+    if (NULL == fert_file)
+    {
+        printf ("\nError: Cannot find the specified fertilizer file %s.\n",
+            filename);
+        exit (EXIT_FAILURE);
+    }
+
+    fert = SllistCreate ();
+    ReadFert (fert_file, fert);
 
     /*
      * Read management file

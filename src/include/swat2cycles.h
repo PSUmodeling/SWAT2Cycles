@@ -62,6 +62,20 @@ typedef struct till_struct
     double          deptil;
 }                   till_struct;
 
+typedef struct fert_struct
+{
+    int             ifnum;
+    char            fertnm[9];
+    double          fminn;
+    double          fminp;
+    double          forgn;
+    double          forgp;
+    double          fnh3n;
+    double          bactpdb;
+    double          bactlpdb;
+    double          bactkddb;
+}                   fert_struct;
+
 typedef struct mgt_struct
 {
     int             oid;
@@ -138,6 +152,7 @@ int                 SortMgt (mgt_struct *, mgt_struct *);
 char                FirstNonWhite (char *);
 int                 NextLine (FILE *, char *, int *);
 int                 ReadBuffer (char *, char, void *, int *, int *);
+void                ReadFert (FILE *, sllist_struct *);
 void                ReadPlant (FILE *, sllist_struct *);
 void                ReadTill (FILE *, sllist_struct *);
 void                ReadMgt (FILE *, sllist_struct *);
