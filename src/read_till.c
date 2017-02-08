@@ -53,4 +53,5 @@ void ReadTill (FILE *till_file, sllist_struct *till)
     }
 
     printf ("%d tillage operations found.\n", till->size);
+    printf ("\n");
 }

@@ -6,16 +6,17 @@ int                 hru;
 int main (int argc, char *argv[])
 {
     char            filename[MAXSTRING];
+    FILE           *crop_file;
     FILE           *fert_file;
+    FILE           *op_file;
     FILE           *plant_file;
     FILE           *till_file;
     FILE           *mgt_file;
-    int             i;
     int             match;
-    sllist_struct  *mgt;
-    sllist_struct  *fert;
-    sllist_struct  *plant;
-    sllist_struct  *till;
+    sllist_struct  *mgt_list;
+    sllist_struct  *fert_list;
+    sllist_struct  *plant_list;
+    sllist_struct  *till_list;
 
     /*
      * Read command line arguments
@@ -47,7 +48,7 @@ int main (int argc, char *argv[])
             exit (EXIT_FAILURE);
         }
 
-        printf ("Generating Cycles input files for subbasin %d, HRU %d.\n",
+        printf ("Generating Cycles input files for subbasin %d, HRU %d.\n\n",
             subbasin, hru);
     }
 
@@ -63,8 +64,9 @@ int main (int argc, char *argv[])
         exit (EXIT_FAILURE);
     }
 
-    plant = SllistCreate ();
-    ReadPlant (plant_file, plant);
+    plant_list = SllistCreate ();
+    ReadPlant (plant_file, plant_list);
+    fclose (plant_file);
 
     /*
      * Read tillage file
@@ -78,8 +80,9 @@ int main (int argc, char *argv[])
         exit (EXIT_FAILURE);
     }
 
-    till = SllistCreate ();
-    ReadTill (till_file, till);
+    till_list = SllistCreate ();
+    ReadTill (till_file, till_list);
+    fclose (till_file);
 
     /*
      * Read fertilizer file
@@ -93,8 +96,9 @@ int main (int argc, char *argv[])
         exit (EXIT_FAILURE);
     }
 
-    fert = SllistCreate ();
-    ReadFert (fert_file, fert);
+    fert_list = SllistCreate ();
+    ReadFert (fert_file, fert_list);
+    fclose (fert_file);
 
     /*
      * Read management file
@@ -109,32 +113,35 @@ int main (int argc, char *argv[])
     }
 
     /* Read management file into a linked list */
-    mgt = SllistCreate ();
-    ReadMgt (mgt_file, mgt);
-
-    if (0 == mgt->size)
-    {
-        printf ("No management found for subbasin %d, HRU %d.\n",
-            subbasin, hru);
-    }
-    else
-    {
-        mgt->current = mgt->head;
-        for (i = 0; i < mgt->size; i++)
-        {
-            printf ("%d\t%d\t%d\t%d\t%d\t%d\t%d\n", i + 1,
-                ((mgt_struct *)mgt->current->data)->oid,
-                ((mgt_struct *)mgt->current->data)->subbasin,
-                ((mgt_struct *)mgt->current->data)->hru,
-                ((mgt_struct *)mgt->current->data)->year,
-                ((mgt_struct *)mgt->current->data)->month,
-                ((mgt_struct *)mgt->current->data)->day);
-                fflush (stdout);
-            SllistStep (mgt);
-        }
-    }
-
+    mgt_list = SllistCreate ();
+    ReadMgt (mgt_file, mgt_list);
     fclose (mgt_file);
+
+    /*
+     * Write Cycles operation file
+     */
+    sprintf (filename, "sb%dhru%d.crop", subbasin, hru);
+    crop_file = fopen (filename, "w");
+    if (NULL == plant_file)
+    {
+        printf ("\nError opening crop file %s.\n",
+            filename);
+        exit (EXIT_FAILURE);
+    }
+
+    sprintf (filename, "sb%dhru%d.operation", subbasin, hru);
+    op_file = fopen (filename, "w");
+    if (NULL == op_file)
+    {
+        printf ("\nError opening operation file %s.\n",
+            filename);
+        exit (EXIT_FAILURE);
+    }
+
+    WriteOp (op_file, mgt_list, crop_file, plant_list, fert_list, till_list);
+    fclose (op_file);
+
+    printf ("Operations have been written into %s.\n", filename);
 
     return (EXIT_SUCCESS);
 }

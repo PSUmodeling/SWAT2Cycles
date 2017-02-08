@@ -37,3 +37,5 @@ swat2cycles
 
 # Input, output, and logs
 /data/*
+*.operation
+*.crop

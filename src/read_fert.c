@@ -99,4 +99,5 @@ void ReadFert (FILE *fert_file, sllist_struct *fert)
     }
 
     printf ("%d fertilizer operations found.\n", fert->size);
+    printf ("\n");
 }

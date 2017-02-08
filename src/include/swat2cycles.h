@@ -7,6 +7,24 @@
 #define AHEAD       0
 #define BEHIND      1
 
+/* Management operations */
+#define END_OF_YEAR     0
+#define PLANTING        1
+#define IRRIGATION      2
+#define FERTILIZER      3
+#define PESTICIDE       4
+#define HARVEST_KILL    5
+#define TILLAGE         6
+#define HARVEST         7
+#define KILL            8
+#define GRAZING         9
+#define AUTO_IRR        10
+#define AUTO_FERT       11
+#define STREET_SWEEP    12
+#define RELEASE_IMPOUND 13
+#define CONT_FERT       14
+#define CONT_PEST       15
+
 /* Land cover/plant classification */
 #define WARM_AN_LEGUME  1
 #define COLD_AN_LEGUME  2
@@ -52,6 +70,7 @@ typedef struct plant_struct
     double          bmx_trees;
     double          ext_coef;
     double          bmdieoff;
+    int             flag;
 }                   plant_struct;
 
 typedef struct till_struct
@@ -90,7 +109,7 @@ typedef struct mgt_struct
     int             day;
     double          husc;
     int             mgt_op;
-    int             headunits;
+    double          heatunits;
     int             plant_id;
     int             curyr_mat;
     double          lai_init;
@@ -148,7 +167,10 @@ typedef struct mgt_struct
 }                   mgt_struct;
 
 int                 AddMgt (sllist_struct *, mgt_struct *);
-int                 SortMgt (mgt_struct *, mgt_struct *);
+int                 DOY (int, int);
+fert_struct*        FindFert (sllist_struct *, int);
+plant_struct*       FindPlant (sllist_struct *, int);
+till_struct*        FindTill (sllist_struct *, int);
 char                FirstNonWhite (char *);
 int                 NextLine (FILE *, char *, int *);
 int                 ReadBuffer (char *, char, void *, int *, int *);
@@ -157,6 +179,14 @@ void                ReadPlant (FILE *, sllist_struct *);
 void                ReadTill (FILE *, sllist_struct *);
 void                ReadMgt (FILE *, sllist_struct *);
 int                 Readable (char *);
+int                 SortMgt (mgt_struct *, mgt_struct *);
+void                WriteCrop (FILE *, plant_struct *, double, double);
+void                WriteFert (FILE *, mgt_struct *, fert_struct *);
+void                WriteIrr (FILE *, mgt_struct *);
+void                WriteOp (FILE *, sllist_struct *, FILE *,
+    sllist_struct *, sllist_struct *, sllist_struct *);
+void                WritePlanting (FILE *, mgt_struct *, plant_struct *);
+void                WriteTill (FILE *, mgt_struct *, till_struct *);
 
 int                 subbasin;
 int                 hru;

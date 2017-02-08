@@ -25,272 +25,540 @@ void ReadMgt (FILE *mgt_file, sllist_struct *mgt)
             bytes_consumed = 0;
 
             /* Col 1 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->oid, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->oid, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 2 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->subbasin, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->subbasin, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 3 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->hru, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->hru, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 4 */
-            sscanf (cmdstr + bytes_consumed, "%s%n", temp->landuse, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 's', temp->landuse, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 5 */
-            sscanf (cmdstr + bytes_consumed, "%s%n", temp->soil, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 's', temp->soil, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 6 */
-            sscanf (cmdstr + bytes_consumed, "%s%n", temp->slope_cd, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 's', temp->slope_cd, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 7 */
-            sscanf (cmdstr + bytes_consumed, "%s%n", temp->crop, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 's', temp->crop, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 8 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->year, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->year, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 9 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->month, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->month, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 10 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->day, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->day, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 11 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->husc, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->husc, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 12 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->mgt_op, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->mgt_op, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 13 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->headunits, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->heatunits, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 14 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->plant_id, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->plant_id, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 15 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->curyr_mat, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->curyr_mat, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 16 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->lai_init, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->lai_init, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 17 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->bio_init, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->bio_init, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 18 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->hi_targ, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->hi_targ, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 19 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->bio_targ, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->bio_targ, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 20 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->cnop, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->cnop, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 21 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->irr_amt, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->irr_amt, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 22 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->fert_id, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->fert_id, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 23 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->frt_kg, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->frt_kg, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 24 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->frt_surface, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->frt_surface, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 25 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->pest_id, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->pest_id, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 26 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->pst_kg, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->pst_kg, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 27 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->tillage_id, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->tillage_id, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 28 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->harveff, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->harveff, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 29 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->hi_ovr, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->hi_ovr, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 30 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->grz_days, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->grz_days, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 31 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->manure_id, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->manure_id, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 32 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->bio_eat, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->bio_eat, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 33 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->bio_trmp, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->bio_trmp, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 34 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->manure_kg, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->manure_kg, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 35 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->wstrs_id, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->wstrs_id, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 36 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->auto_wstrs, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->auto_wstrs, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 37 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->afert_id, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->afert_id, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 38 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->auto_nstrs, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->auto_nstrs, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 39 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->auto_napp, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->auto_napp, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 40 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->auto_nyr, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->auto_nyr, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 41 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->auto_eff, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->auto_eff, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 42 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->afrt_surface, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->afrt_surface, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 43 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->sweepeff, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->sweepeff, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 44 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->fr_curb, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->fr_curb, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 45 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->imp_trig, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->imp_trig, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 46 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->fert_days, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->fert_days, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 47 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->cfrt_id, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->cfrt_id, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 48 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->ifrt_freq, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->ifrt_freq, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 49 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->cfrt_kg, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->cfrt_kg, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 50 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->pst_dep, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->pst_dep, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 51 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->ihv_gbm, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->ihv_gbm, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 52 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->irr_salt, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->irr_salt, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 53 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->irr_efm, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->irr_efm, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 54 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->irr_sq, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->irr_sq, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 55 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->irr_eff, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->irr_eff, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 56 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->irr_mx, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->irr_mx, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 57 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->irr_asq, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->irr_asq, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 58 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->cpst_id, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->cpst_id, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 59 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->pest_days, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->pest_days, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 60 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->ipest_freq, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->ipest_freq, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 61 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->cpst_kg, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->cpst_kg, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 62 */
-            sscanf (cmdstr + bytes_consumed, "%lf%n", &temp->burn_frlb, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'd', &temp->burn_frlb, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 63 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->op_num, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->op_num, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 64 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->irr_sc, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->irr_sc, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 65 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->irr_no, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->irr_no, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 66 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->irr_sca, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->irr_sca, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Col 67 */
-            sscanf (cmdstr + bytes_consumed, "%d%n", &temp->irr_noa, &bytes_now);
-            bytes_consumed += bytes_now;
+            if (-1 == ReadBuffer (cmdstr, 'i', &temp->irr_noa, &bytes_consumed,
+                &bytes_now))
+            {
+                printf ("Error reading management file at Line %d\n", lno);
+                exit (EXIT_FAILURE);
+            }
 
             /* Add management record to lined list if needed */
             if (temp->subbasin == subbasin && temp->hru == hru)

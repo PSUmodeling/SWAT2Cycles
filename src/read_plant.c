@@ -53,6 +53,10 @@ void ReadPlant (FILE *plant_file, sllist_struct *plant)
         {
             bytes_consumed = 0;
             bytes_now = 0;
+
+            /* Initialize flag */
+            temp->flag = 0;
+
             /* Col 1*/
             if (-1 == ReadBuffer (cmdstr, 'd', &temp->bio_e, &bytes_consumed,
                 &bytes_now))
@@ -315,4 +319,5 @@ void ReadPlant (FILE *plant_file, sllist_struct *plant)
     }
 
     printf ("%d plant types found.\n", plant->size);
+    printf ("\n");
 }

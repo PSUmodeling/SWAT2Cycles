@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -g -O0 -Wall
+LIBS = -lm
 
 SRCDIR = ./src
-LIBS = -lm
 INCLUDES = -I${SRCDIR}/include
 
 SRCS_ = main.c\
@@ -12,20 +12,20 @@ SRCS_ = main.c\
 	read_plant.c\
 	read_till.c\
 	sllist.c\
-	sort_mgt.c
+	sort_mgt.c\
+	write_crop.c\
+	write_op.c
 
 HEADERS_ = swat2cycles.h\
-	sslist.h	
+	sllist.h
 
 EXECUTABLE = swat2cycles
 
-
 SRCS = $(patsubst %,$(SRCDIR)/%,$(SRCS_))
 HEADERS = $(patsubst %,$(SRCDIR)/include/%,$(HEADERS_))
-
 OBJS = $(SRCS:.c=.o)
 
-.PHONY: all clean help
+.PHONY: clean
 
 $(EXECUTABLE): $(OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) -o $(EXECUTABLE) $(OBJS) $(LIBS)
@@ -34,4 +34,7 @@ $(EXECUTABLE): $(OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	@rm -f $(OBJS) $(EXECUTABLE)
+	@echo
+	@echo "... Cleaning ..."
+	@echo
+	@$(RM) $(OBJS) $(EXECUTABLE)
