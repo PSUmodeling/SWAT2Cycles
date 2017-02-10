@@ -71,8 +71,8 @@ int NextLine (FILE *fid, char *cmdstr, int *lno)
     return (0);
 }
 
-int ReadBuffer (char *cmdstr, char type, void *data, int *bytes_consumed,
-    int *bytes_now)
+int ReadLine (char *cmdstr, char type, void *data, int *bytes_consumed,
+        int *bytes_now)
 {
     int             match;
 
@@ -80,18 +80,69 @@ int ReadBuffer (char *cmdstr, char type, void *data, int *bytes_consumed,
     {
         case 'd':
             match = sscanf (cmdstr + *bytes_consumed, "%lf%n", (double *)data,
-                bytes_now);
+                    bytes_now);
             (*bytes_consumed) += *bytes_now;
             break;
         case 'i':
             match = sscanf (cmdstr + *bytes_consumed, "%d%n", (int *)data,
-                bytes_now);
+                    bytes_now);
             (*bytes_consumed) += *bytes_now;
             break;
         case 's':
             match = sscanf (cmdstr + *bytes_consumed, "%s%n", (char *)data,
-                bytes_now);
+                    bytes_now);
             (*bytes_consumed) += *bytes_now;
+            break;
+        default:
+            printf ("Error: Keyword type \'%c\' is not defined.\n", type);
+            exit (EXIT_FAILURE);
+    }
+
+    if (1 == match)
+    {
+        return (0);
+    }
+    else
+    {
+        return (-1);
+    }
+}
+
+int ReadDlmtdLine (char *cmdstr, char type, void *data, int *bytes_consumed,
+        int *bytes_now)
+{
+    int             match;
+    char            token[MAXSTRING];
+    char            ch;
+    int             i;
+
+    for (i = 0; i < MAXSTRING - *bytes_consumed; i++)
+    {
+        ch = cmdstr[*bytes_consumed + i];
+
+        if (',' == ch || '\r' == ch || '\n' == ch)
+        {
+            token[i] = '\0';
+            break;
+        }
+        else
+        {
+            token[i] = ch;
+        }
+    }
+
+    (*bytes_consumed) += i + 1;
+
+    switch (type)
+    {
+        case 'd':
+            match = sscanf (token, "%lf", (double *)data);
+            break;
+        case 'i':
+            match = sscanf (token, "%d", (int *)data);
+            break;
+        case 's':
+            match = sscanf (token, "%s", (char *)data);
             break;
         default:
             printf ("Error: Keyword type \'%c\' is not defined.\n", type);

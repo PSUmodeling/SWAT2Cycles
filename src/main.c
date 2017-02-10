@@ -103,7 +103,7 @@ int main (int argc, char *argv[])
     /*
      * Read management file
      */
-    strcpy (filename, "data/mgt2.txt");
+    strcpy (filename, "data/mgt.txt");
     mgt_file = fopen (filename, "r");
     if (NULL == mgt_file)
     {
@@ -116,6 +116,17 @@ int main (int argc, char *argv[])
     mgt_list = SllistCreate ();
     ReadMgt (mgt_file, mgt_list);
     fclose (mgt_file);
+
+    if (mgt_list->size == 0)
+    {
+        printf ("No management record found for subbasin %d, HRU %d.\n",
+            subbasin, hru);
+        exit (EXIT_SUCCESS);
+    }
+
+    printf ("%d management records found for Subbasin %d, HRU %d.\n",
+        mgt_list->size, subbasin, hru);
+    printf ("\n");
 
     /*
      * Write Cycles operation file

@@ -23,25 +23,25 @@ void ReadTill (FILE *till_file, sllist_struct *till)
 
             bytes_consumed = 0;
             bytes_now = 0;
-            if (-1 == ReadBuffer (cmdstr, 'i', &temp->itnum, &bytes_consumed,
+            if (-1 == ReadLine (cmdstr, 'i', &temp->itnum, &bytes_consumed,
                 &bytes_now))
             {
                 printf ("Error reading tillage file at Line %d\n", lno);
                 exit (EXIT_FAILURE);
             }
-            if (-1 == ReadBuffer (cmdstr, 's', &temp->tillnm, &bytes_consumed,
+            if (-1 == ReadLine (cmdstr, 's', &temp->tillnm, &bytes_consumed,
                 &bytes_now))
             {
                 printf ("Error reading tillage file at Line %d\n", lno);
                 exit (EXIT_FAILURE);
             }
-            if (-1 == ReadBuffer (cmdstr, 'd', &temp->effmix, &bytes_consumed,
+            if (-1 == ReadLine (cmdstr, 'd', &temp->effmix, &bytes_consumed,
                 &bytes_now))
             {
                 printf ("Error reading tillage file at Line %d\n", lno);
                 exit (EXIT_FAILURE);
             }
-            if (-1 == ReadBuffer (cmdstr, 'd', &temp->deptil, &bytes_consumed,
+            if (-1 == ReadLine (cmdstr, 'd', &temp->deptil, &bytes_consumed,
                 &bytes_now))
             {
                 printf ("Error reading tillage file at Line %d\n", lno);

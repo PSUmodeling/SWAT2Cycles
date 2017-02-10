@@ -30,7 +30,7 @@ OBJS = $(SRCS:.c=.o)
 $(EXECUTABLE): $(OBJS)
 	$(CC) $(CFLAGS) $(INCLUDES) -o $(EXECUTABLE) $(OBJS) $(LIBS)
 
-%.o: %.c
+%.o: %.c $(HEADER)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
