@@ -19,7 +19,7 @@ INSTRUCTION:
   
 2. Install the code.
 
-  Download the code from here.
+  Download the code from [the release page](https://github.com/shiyuning/SWAT2Cycles/releases).
   Put the code in your work directory and type `make`.
 
 3. Convert management file
