@@ -2,10 +2,10 @@
 
 int                 subbasin;
 int                 hru;
+char                filename[MAXSTRING];
 
 int main (int argc, char *argv[])
 {
-    char            filename[MAXSTRING];
     FILE           *crop_file;
     FILE           *fert_file;
     FILE           *op_file;
@@ -13,6 +13,11 @@ int main (int argc, char *argv[])
     FILE           *till_file;
     FILE           *mgt_file;
     int             match;
+    char            plantfn[MAXSTRING];
+    char            tillfn[MAXSTRING];
+    char            fertfn[MAXSTRING];
+    char            cropfn[MAXSTRING];
+    char            opfn[MAXSTRING];
     sllist_struct  *mgt_list;
     sllist_struct  *fert_list;
     sllist_struct  *plant_list;
@@ -21,27 +26,29 @@ int main (int argc, char *argv[])
     /*
      * Read command line arguments
      */
-    if (argc < 3)
+    if (argc < 4)
     {
-        printf ("Please specify subbasin and HRU, using\n");
-        printf ("./swat2cycles SUBBASIN HRU\n");
+        printf ("Please specify management file, subbasin and HRU, using\n");
+        printf ("./swat2cycles FILE_NAME SUBBASIN HRU\n");
         exit (EXIT_FAILURE);
     }
-    else if (argc > 3)
+    else if (argc > 4)
     {
         printf ("Too many input arguments.\n");
         exit (EXIT_FAILURE);
     }
     else
     {
-        match = sscanf (argv[1], "%d", &subbasin);
+        strcpy (filename, argv[1]);
+
+        match = sscanf (argv[2], "%d", &subbasin);
         if (match != 1)
         {
             printf ("Error reading subbasin index from command line.\n");
             exit (EXIT_FAILURE);
         }
 
-        match = sscanf (argv[2], "%d", &hru);
+        match = sscanf (argv[3], "%d", &hru);
         if (match != 1)
         {
             printf ("Error reading HRU index from command line.\n");
@@ -55,12 +62,12 @@ int main (int argc, char *argv[])
     /*
      * Read plant file
      */
-    strcpy (filename, "data/plant.dat");
-    plant_file = fopen (filename, "r");
+    strcpy (plantfn, "data/plant.dat");
+    plant_file = fopen (plantfn, "r");
     if (NULL == plant_file)
     {
         printf ("\nError: Cannot find the specified plant file %s.\n",
-            filename);
+            plantfn);
         exit (EXIT_FAILURE);
     }
 
@@ -71,12 +78,12 @@ int main (int argc, char *argv[])
     /*
      * Read tillage file
      */
-    strcpy (filename, "data/till.dat");
-    till_file = fopen (filename, "r");
+    strcpy (tillfn, "data/till.dat");
+    till_file = fopen (tillfn, "r");
     if (NULL == till_file)
     {
         printf ("\nError: Cannot find the specified tillage file %s.\n",
-            filename);
+            tillfn);
         exit (EXIT_FAILURE);
     }
 
@@ -87,12 +94,12 @@ int main (int argc, char *argv[])
     /*
      * Read fertilizer file
      */
-    strcpy (filename, "data/fert.dat");
-    fert_file = fopen (filename, "r");
+    strcpy (fertfn, "data/fert.dat");
+    fert_file = fopen (fertfn, "r");
     if (NULL == fert_file)
     {
         printf ("\nError: Cannot find the specified fertilizer file %s.\n",
-            filename);
+            fertfn);
         exit (EXIT_FAILURE);
     }
 
@@ -131,28 +138,28 @@ int main (int argc, char *argv[])
     /*
      * Write Cycles operation file
      */
-    sprintf (filename, "sb%dhru%d.crop", subbasin, hru);
-    crop_file = fopen (filename, "w");
+    sprintf (cropfn, "sb%dhru%d.crop", subbasin, hru);
+    crop_file = fopen (cropfn, "w");
     if (NULL == plant_file)
     {
         printf ("\nError opening crop file %s.\n",
-            filename);
+            cropfn);
         exit (EXIT_FAILURE);
     }
 
-    sprintf (filename, "sb%dhru%d.operation", subbasin, hru);
-    op_file = fopen (filename, "w");
+    sprintf (opfn, "sb%dhru%d.operation", subbasin, hru);
+    op_file = fopen (opfn, "w");
     if (NULL == op_file)
     {
         printf ("\nError opening operation file %s.\n",
-            filename);
+            opfn);
         exit (EXIT_FAILURE);
     }
 
     WriteOp (op_file, mgt_list, crop_file, plant_list, fert_list, till_list);
     fclose (op_file);
 
-    printf ("Operations have been written into %s.\n", filename);
+    printf ("Operations have been written into %s.\n", opfn);
 
     return (EXIT_SUCCESS);
 }

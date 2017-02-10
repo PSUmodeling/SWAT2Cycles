@@ -191,3 +191,4 @@ void                WriteTill (FILE *, mgt_struct *, till_struct *);
 
 int                 subbasin;
 int                 hru;
+char                filename[MAXSTRING];
