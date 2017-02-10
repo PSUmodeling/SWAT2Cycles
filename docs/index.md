@@ -35,7 +35,7 @@ INSTRUCTION:
   **EXAMPLE:**
     
   If you want to convert the operations within Subbasin 1, HRU 1 in the `mgt.txt`, you do
-    
+
   ```shell
   $ ./swat2cycles data/mgt.txt 1 1
   ```
