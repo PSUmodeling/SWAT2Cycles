@@ -110,7 +110,6 @@ int main (int argc, char *argv[])
     /*
      * Read management file
      */
-    strcpy (filename, "data/mgt.txt");
     mgt_file = fopen (filename, "r");
     if (NULL == mgt_file)
     {

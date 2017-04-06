@@ -219,7 +219,7 @@ void WriteFert (FILE *op_file, mgt_struct *mgt, fert_struct *fert)
     fprintf (op_file, "%-34s%d\n", "YEAR", mgt->year);
     fprintf (op_file, "%-34s%d\n", "DOY", DOY (mgt->month, mgt->day));
     fprintf (op_file, "%-34s%s\n", "SOURCE", fert->fertnm);
-    fprintf (op_file, "%-34s%.2lf\n", "MASS", mgt->frt_kg * 0.001);
+    fprintf (op_file, "%-34s%.2lf\n", "MASS", mgt->frt_kg);
     fprintf (op_file, "%-34s%s\n", "FORM", "LIQUID");
     fprintf (op_file, "%-34s%s\n", "METHOD", "BROADCAST");
     fprintf (op_file, "%-34s%d\n", "LAYER", (mgt->frt_surface > 0.5) ? 1 : 2);
