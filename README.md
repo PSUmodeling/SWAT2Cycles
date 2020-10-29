@@ -7,6 +7,7 @@ Contact: Yuning Shi [(Send Email)](mailto:yshi@psu.edu)
 ## INSTRUCTION
 
 1. Prerequisites
+
    SWAT2Cycles script requires Python 3.x with Pandas and Numpy packages.
 
 2. Prepare your SWAT management file
@@ -30,6 +31,8 @@ Contact: Yuning Shi [(Send Email)](mailto:yshi@psu.edu)
    python3 ./swat2cycles.py [-s SUBBASIN] [-u HRU] [-f SWAT_MGT_FILE]
    ```
 
+   Note that the script will look for the SWAT management file in the `data` directory.
+
    An example HRU list file (`list.txt`) is provided.
 
-   The converted Cycles operation files are named as SBxHRUy[LANDUSE], where `x` is the subbasin index, `y` is the HRU index, and `LANDUSE` is the name of landuse in the choosen HRU.
+   The converted Cycles operation files are named as SBxHRUy[LANDUSE], where `x` is the sub-basin index, `y` is the HRU index, and `LANDUSE` is the name of land use in the chosen HRU.
