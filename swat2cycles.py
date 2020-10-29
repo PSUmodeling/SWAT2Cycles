@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import csv
 import numpy as np
 import pandas
 import sys
@@ -298,14 +299,16 @@ def main():
         '-s',
         '--subbasin',
         type=int,
-        required=True,
         help='Subbasin')
     parser.add_argument(
         '-u',
         '--hru',
         type=int,
-        required=True,
         help='HRU')
+    parser.add_argument(
+        '-l',
+        '--list',
+        help='List of subbasins and HRUs')
     parser.add_argument(
         '-f',
         '--mgt-file',
@@ -314,6 +317,27 @@ def main():
         help='Management file')
 
     args = parser.parse_args()
+
+    if (args.list is None) and ((args.subbasin is None) or (args.hru is None)):
+        sys.exit('Subbasins and HRUs should be specified either in a list file '
+            '(using the\n-l/--list option) or in the command line (using the '
+            '-s/--subbasin, and -u/--hru\noptions.')
+
+    hrus = []
+
+    if args.list is not None:
+        # Read HRU list from file
+        try:
+            with open(args.list) as f:
+                list = csv.reader(f, delimiter=' ', skipinitialspace=True)
+                next(list)
+                for row in list:
+                    hrus.append([int(row[0]), int(row[1])])
+        except FileNotFoundError:
+            sys.exit('Oops! Cannot find HUR list %s' % (args.list))
+    else:
+        # Specify subbasin and HRU from command line
+        hrus.append([args.subbasin, args.hru])
 
     # Read databases
     ferts = read_fert()
@@ -331,7 +355,9 @@ def main():
         sys.exit('Oops! Cannot find data/%s' % (args.mgt_file))
 
     # Write to Cycles operation file
-    write_operation(args.subbasin, args.hru, mgt, ferts, crops, tills)
+    for hru in hrus:
+        print('Subbasin %d, HRU %d' % (hru[0], hru[1]))
+        write_operation(hru[0], hru[1], mgt, ferts, crops, tills)
 
 
 if __name__ == '__main__':
