@@ -23,6 +23,126 @@ RELEASE_IMPOUND = 13
 CONT_FERT       = 14
 CONT_PEST       = 15
 
+def write_operation(subbasin, hru, mgt, ferts, crops, tills):
+    '''
+    Write operations to Cycles operation file
+    '''
+    # Filter management by subbasin and HRU
+    mgt = mgt[(mgt['SUBBASIN'] == subbasin) & (mgt['HRU'] == hru)]
+
+    if mgt.empty is True:
+        sys.exit('Cannot find operations for Subbasin %d HRU %d' % (subbasin,
+                                                                    hru))
+
+    # Sort management by time
+    mgt = mgt.sort_values(by=['YEAR', 'MONTH', 'DAY'])
+
+    # Cycles operation file name
+    filen = 'SB%dHRU%d%s.operation' % (subbasin,
+                                       hru,
+                                       mgt['LANDUSE'].iloc[0].lower())
+
+    # Loop through SWAT operations
+    with open(filen, 'w') as fp:
+        for _, row in mgt.iterrows():
+            if row['MGT_OP'] == END_OF_YEAR:
+                # Not needed by Cycles
+                continue
+            elif row['MGT_OP'] == PLANTING:
+                # Planting operation
+                # Save crop being planted which will be used when
+                # harvesting/killing
+                ccrop = crops['crop'].loc[row['PLANT_ID']]
+                write_planting(row, ccrop, fp)
+            elif row['MGT_OP'] == IRRIGATION:
+                # Irrigation operation
+                write_irrig(row, fp)
+            elif row['MGT_OP'] == FERTILIZER:
+                # Fertilization operation
+                write_fert(row, ferts.loc[row['FERT_ID']], fp)
+            elif row['MGT_OP'] == PESTICIDE:
+                # Not supported
+                print('Pesticide operations are not yet supported by Cycles. '
+                    'OID %d was not written\ninto Cycles input.\n'
+                    % (row['OID']))
+            elif row['MGT_OP'] == HARVEST_KILL:
+                # Equivalent to grain harvest and kill operations
+                till = {'tillnm': 'Grain_Harvest',
+                        'deptil': '0.0',
+                        'sdr':    '0.0',
+                        'effmix': '0.0',
+                        'cropnm': ccrop}
+                write_till(row, till, fp)
+
+                till = {'tillnm': 'Kill_Crop',
+                        'deptil': '0.0',
+                        'sdr':    '0.0',
+                        'effmix': '0.0',
+                        'cropnm': ccrop}
+                write_till(row, till, fp)
+            elif row['MGT_OP'] == TILLAGE:
+                # Tillage operation
+                depth = tills['deptil'].loc[row['TILLAGE_ID']] / 1000.0
+                mixing = tills['effmix'].loc[row['TILLAGE_ID']]
+                till = {'tillnm': tills['tillnm'].loc[row['TILLAGE_ID']],
+                        'deptil': '%.2f' % (depth),
+                        'sdr':    '0.0',
+                        'effmix': '%.2f' % (mixing),
+                        'cropnm': 'N/A'}
+                write_till(row, till, fp)
+            elif row['MGT_OP'] == HARVEST:
+                # Equivalent to forage harvest operation
+                till = {'tillnm': 'Forage_Harvest',
+                        'deptil': '0.0',
+                        'sdr':    '0.0',
+                        'effmix': '0.0',
+                        'cropnm': ccrop}
+                write_till(row, till, fp)
+            elif row['MGT_OP'] == KILL:
+                # Kill operations
+                till = {'tillnm': 'Kill_Crop',
+                        'deptil': '0.0',
+                        'sdr':    '0.0',
+                        'effmix': '0.0',
+                        'cropnm': ccrop}
+                write_till(row, till, fp)
+            elif row['MGT_OP'] == GRAZING:
+                # Not supported
+                print('Grazing operations are not yet supported by Cycles. '
+                    'OID %d is not written\ninto Cycles input.\n'
+                    % (row['OID']))
+            elif row['MGT_OP'] == AUTO_IRR:
+                # Manual edits needed
+                print('SWAT auto irrigation operations are different from '
+                      'Cycles auto irrigation\noperations. Please manually add '
+                      'OID %d to the operation file.' % (row['OID']))
+            elif row['MGT_OP'] == AUTO_FERT:
+                # Not supported
+                print('Auto fertilization operations are not yet supported by '
+                    'Cycles. OID %d is not\nwritten into Cycles input.\n'
+                    % (row['OID']))
+            elif row['MGT_OP'] == STREET_SWEEP:
+                # Not supported
+                print('Street sweeping operations are not yet supported by '
+                    'Cycles. OID %d is not\nwritten into Cycles input.\n'
+                    % (row['OID']))
+            elif row['MGT_OP'] == RELEASE_IMPOUND:
+                # Not supported
+                print('Release/impound operations are not yet supported by '
+                    'Cycles. OID %d is not\nwritten into Cycles input.\n'
+                    % (row['OID']))
+            elif row['MGT_OP'] == CONT_FERT:
+                # Not supported
+                print('Continuous fertilization operations are not yet '
+                      'supported by Cycles. OID %d is not\nwritten into Cycles '
+                      'input.\n' % (row['OID']))
+            elif row['MGT_OP'] == CONT_PEST:
+                # Not supported
+                print('Continuous pesticides operations are not yet supported '
+                    'by Cycles. OID %d is not\nwritten into Cycles input.\n'
+                    % (row['OID']))
+
+
 def write_planting(op, cropnm, fp):
     '''
     Write planting operations to file
@@ -210,112 +330,8 @@ def main():
     except FileNotFoundError:
         sys.exit('Oops! Cannot find data/%s' % (args.mgt_file))
 
-    # Filter management by subbasin and HRU
-    mgt = mgt[(mgt['SUBBASIN'] == args.subbasin) & (mgt['HRU'] == args.hru)]
-
-    if mgt.empty is True:
-        sys.exit(
-            'Cannot find operations for Subbasin %d HRU %d'
-            % (args.subbasin, args.hru))
-
-    # Sort management by time
-    mgt = mgt.sort_values(by=['YEAR', 'MONTH', 'DAY'])
-
-    # Cycles operation file name
-    filen = 'SB%dHRU%d%s.operation' % (args.subbasin,
-                                       args.hru,
-                                       mgt['LANDUSE'].iloc[0].lower())
-
-    # Loop through SWAT operations
-    with open(filen, 'w') as fp:
-        for _, row in mgt.iterrows():
-            if row['MGT_OP'] == END_OF_YEAR:
-                # Not needed by Cycles
-                continue
-            elif row['MGT_OP'] == PLANTING:
-                # Planting operation
-                # Save crop being planted which will be used when
-                # harvesting/killing
-                ccrop = crops['crop'].loc[row['PLANT_ID']]
-                write_planting(row, ccrop, fp)
-            elif row['MGT_OP'] == IRRIGATION:
-                # Irrigation operation
-                write_irrig(row, fp)
-            elif row['MGT_OP'] == FERTILIZER:
-                # Fertilization operation
-                write_fert(row, ferts.loc[row['FERT_ID']], fp)
-            elif row['MGT_OP'] == PESTICIDE:
-                # Not supported
-                print('Pesticide operations are not yet supported by Cycles. '
-                    'OID %d was not written\ninto Cycles input.\n'
-                    % (row['OID']))
-            elif row['MGT_OP'] == HARVEST_KILL:
-                # Equivalent to grain harvest and kill operations
-                till = {'tillnm': 'Grain_Harvest',
-                        'deptil': '0.0',
-                        'sdr':    '0.0',
-                        'effmix': '0.0',
-                        'cropnm': ccrop}
-                write_till(row, till, fp)
-
-                till = {'tillnm': 'Kill_Crop',
-                        'deptil': '0.0',
-                        'sdr':    '0.0',
-                        'effmix': '0.0',
-                        'cropnm': ccrop}
-                write_till(row, till, fp)
-            elif row['MGT_OP'] == TILLAGE:
-                # Tillage operation
-                depth = tills['deptil'].loc[row['TILLAGE_ID']] / 1000.0
-                mixing = tills['effmix'].loc[row['TILLAGE_ID']]
-                till = {'tillnm': tills['tillnm'].loc[row['TILLAGE_ID']],
-                        'deptil': '%.2f' % (depth),
-                        'sdr':    '0.0',
-                        'effmix': '%.2f' % (mixing),
-                        'cropnm': 'N/A'}
-                write_till(row, till, fp)
-            elif row['MGT_OP'] == HARVEST:
-                till = {'tillnm': 'Forage_Harvest',
-                        'deptil': '0.0',
-                        'sdr':    '0.0',
-                        'effmix': '0.0',
-                        'cropnm': ccrop}
-                write_till(row, till, fp)
-            elif row['MGT_OP'] == KILL:
-                till = {'tillnm': 'Kill_Crop',
-                        'deptil': '0.0',
-                        'sdr':    '0.0',
-                        'effmix': '0.0',
-                        'cropnm': ccrop}
-                write_till(row, till, fp)
-            elif row['MGT_OP'] == GRAZING:
-                print('Grazing operations are not yet supported by Cycles. '
-                    'OID %d is not written\ninto Cycles input.\n'
-                    % (row['OID']))
-            elif row['MGT_OP'] == AUTO_IRR:
-                print('SWAT auto irrigation operations are different from '
-                      'Cycles auto irrigation\noperations. Please manually add '
-                      'OID %d to the operation file.' % (row['OID']))
-            elif row['MGT_OP'] == AUTO_FERT:
-                print('Auto fertilization operations are not yet supported by '
-                    'Cycles. OID %d is not\nwritten into Cycles input.\n'
-                    % (row['OID']))
-            elif row['MGT_OP'] == STREET_SWEEP:
-                print('Street sweeping operations are not yet supported by '
-                    'Cycles. OID %d is not\nwritten into Cycles input.\n'
-                    % (row['OID']))
-            elif row['MGT_OP'] == RELEASE_IMPOUND:
-                print('Release/impound operations are not yet supported by '
-                    'Cycles. OID %d is not\nwritten into Cycles input.\n'
-                    % (row['OID']))
-            elif row['MGT_OP'] == CONT_FERT:
-                print('Continuous fertilization operations are not yet '
-                      'supported by Cycles. OID %d is not\nwritten into Cycles '
-                      'input.\n' % (row['OID']))
-            elif row['MGT_OP'] == CONT_PEST:
-                print('Continuous pesticides operations are not yet supported '
-                    'by Cycles. OID %d is not\nwritten into Cycles input.\n'
-                    % (row['OID']))
+    # Write to Cycles operation file
+    write_operation(args.subbasin, args.hru, mgt, ferts, crops, tills)
 
 
 if __name__ == '__main__':
